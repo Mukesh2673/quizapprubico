@@ -1,14 +1,14 @@
 <template>
  
-  <HelloWorld/>
+  <quiz/>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue"
+import quiz from './components/quiz.vue'
 export default {
   name: 'App',
   components: {
-  HelloWorld
+  quiz
   }
 }
 </script>
