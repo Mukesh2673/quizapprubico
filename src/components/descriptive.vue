@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-      <div class="row" :style="{ display: bar }">
+<!--       <div class="row" :style="{ display: bar }">
       <div class="progress">
         <div
           class="progress-bar progress-bar-striped  bg-danger"
@@ -15,7 +15,7 @@
         
       </div>
     </div>
-    
+     -->
 
 
     <div class="row d-flex justify-content-center mt-5">
@@ -37,18 +37,15 @@
           <h5 class="card-title text-center">Simple Quiz Application</h5>
       
           <div class="question  pt-2">
-        <div v-for="(name,j) in questions[0]" :Key="j" class="mt-2" ><b>{{j+1}}  {{name.question}}</b>
-        <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3 mt-2" id="options"   v-for="(i, k) in name.options" :Key="k"> 
-         
+        <div v-for="(name,j) in questions[0]" :Key="j" class="mt-2" ><b v-if ="!name.descriptive">{{j+1}}  {{name.question}}</b>
+       <div v-if="name.descriptive"><question @answer="answer" :question1="name"  :j="j"/></div>
+        <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3 mt-2" id="options"   v-for="(i, k) in name.options" :Key="k" v-else> 
           <input type="radio" :name="name.question" v-on:Click="(e)=>test(e,name.question,i,name.answers[0])" :value="i"> <span class="checkmark"></span> <label class="options ml-3">{{i}}</label> 
-
+           
            </div>
           </div>
       </div>
-      <div class="mb-3">
-
-  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" @blur="handleBlur"></textarea>
-</div>
+      
       <div class="text-center">
       <button type="button align-middle" class="btn btn-primary mt-2" @click="result">Submit</button>
       </div>
@@ -59,11 +56,11 @@
 </template>
 <script>
 
+import question from './question.vue'
 export default {
+  components: { question },
   Name: "AddQuestion",
-  component:{
-    question
-  },
+  component:{question},
   data() {
     return {
       questions: [],
@@ -80,13 +77,24 @@ marksbody: "none",
       timer: null,
       bar: "block",
       userInput:{},
-      marks:0 //set marks initial to 0
+      marks:0,
+      danswer:'' //set marks initial to 0
      
     };
   },
   methods: {
+answer(e){
+  this.danswer=e;
+
+  this.userInput={...this.userInput, ...this.danswer} 
+  console.log(this.userInput);
+},
+
+
+
+
     /*  make a counter for progress bar */
-    countDownTimer() {
+   /*  countDownTimer() {
       if (this.countDown > 0) {
         this.timer = setTimeout(() => {
           if(this.countDown==1){
@@ -111,7 +119,7 @@ marksbody: "none",
           }
         }, 1000);
       }
-    },
+    }, */
 
     async getQuestions() {
       let res = await fetch('http://localhost:3000/q1');
@@ -131,7 +139,8 @@ marksbody: "none",
   test(e,question,answer,cquestion){
   if(answer==cquestion)
   {
-  this.userInput={...this.userInput,[question]:answer} //use object Destructuring to store common value;
+  this.userInput={...this.userInput,[question]:answer}
+  console.log(this.userInput); //use object Destructuring to store common value;
   }
 },
 //function on button submit
@@ -157,7 +166,7 @@ computed: {
   beforeMount() {
  
     this.getQuestions();
-    this.countDownTimer();
+    //this.countDownTimer();
     //console.log(this.questions)
   },
 };

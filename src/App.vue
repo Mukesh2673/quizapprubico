@@ -1,14 +1,14 @@
 <template>
  
-  <multiquestionquiz/>
+  <descriptive/>
 </template>
 
 <script>
-import multiquestionquiz from './components/multiquestionquiz.vue'
+import descriptive from './components/descriptive.vue'
 export default {
   name: 'App',
   components: {
-  multiquestionquiz
+  descriptive
   }
 }
 </script>
