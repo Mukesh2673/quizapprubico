@@ -1,6 +1,6 @@
 <template>
 <div class="mb-3">
-    <b>{{j+1}}&nbsp;{{question1}}</b>
+    <b>{{j+1}}&nbsp;{{question1.question}}</b>
   <textarea class="form-control" id="descriptive" rows="3" :placeholder="placeholdertext1" value=""
 @blur="handleBlur" :style="[this.addcss1 ?  {'box-shadow': '0px 2px 3px 2px red'} : 'none' ]">
 
@@ -16,7 +16,8 @@ data(){
         descriptive_data:{},
         answers:'',
         addcss:false,
-        placeholdertext:''
+        placeholdertext:'',
+        submit:true
         }
 },
 //get props from backend
@@ -35,6 +36,7 @@ props:{
      {
         this.placeholdertext='Answer is required'
         this.addcss=true;
+        this.submit=true;
      }
      else{
              

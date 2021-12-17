@@ -1,14 +1,14 @@
 <template>
  
-  <descriptive/>
+  <router-view/>
 </template>
 
 <script>
-import descriptive from './components/descriptive.vue'
+import register from './components/Loginauthentication/register.vue'
 export default {
   name: 'App',
   components: {
-  descriptive
+  register
   }
 }
 </script>
