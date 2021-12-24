@@ -1,21 +1,5 @@
 <template>
   <div class="container">
-    <!--       <div class="row" :style="{ display: bar }">
-      <div class="progress">
-        <div
-          class="progress-bar progress-bar-striped  bg-danger"
-          role="progressbar"
-          :style="{ width: [width1],height:'5px'}"
-          aria-valuenow="25"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          value="100"
-        ></div>
-        
-      </div>
-    </div>
-     -->
-
     <div class="row d-flex justify-content-center mt-5">
       <div class="card cardcss" :style="{ display: marksbody }">
         <div class="card-body">
@@ -37,7 +21,7 @@
               this.username
             }}</span>
           </h5>
-
+          <button class="btn btn-primary" @click="newpage">gonew page</button>
           <div class="question pt-2">
             <div v-for="(name, j) in questions[0]" :Key="j" class="mt-2">
               <b v-if="!name.descriptive">{{ j + 1 }} {{ name.question }}</b>
@@ -54,7 +38,9 @@
                 <input
                   type="radio"
                   :name="name.question"
-                  v-on:Click="(e) => test(e, name.question, i, name.answers[0])"
+                  v-on:Click="
+                    (e) => test(e, name.question, i, name.answers[0], name.id)
+                  "
                   :value="i"
                 />
                 <span class="checkmark"></span>
@@ -79,6 +65,7 @@
 </template>
 <script>
 import axios from "axios";
+import "vue-toast-notification/dist/theme-sugar.css";
 import question from "../../components/question.vue";
 export default {
   components: { question },
@@ -101,48 +88,33 @@ export default {
       marks: 0,
       danswer: "", //set marks initial to 0
       username: "", //get logged in user details.
+      require: false,
     };
   },
   methods: {
     answer(e) {
       this.danswer = e;
-
+      this.require = e.require;
       this.userInput = { ...this.userInput, ...this.danswer };
+      //console.log(this.userInput);
+    },
+   async newpage(){
+     console.log('gettoken called');
+      let res = await axios.get("http://localhost:1100/submited/userdetails");
+    },
+    open() {
+      this.$toast.open({
+        message: "Test answers required",
+        type: "warning",
+        duration: 5000,
+        dismissible: true,
+      });
     },
 
-    /*  make a counter for progress bar */
-    /*  countDownTimer() {
-      if (this.countDown > 0) {
-        this.timer = setTimeout(() => {
-          if(this.countDown==1){
-          this.marks=Object.keys(this.userInput).length;
-          this.marksbody = "block";
-          this.bar = "none";
-          this.questionsbody = !this.questionsbody;
-
-          }
-      
-          if (this.countDown == 1) {
-            this.width = "0%";
-          } else {
-            this.width = Math.floor(this.countDown/3) + "%" //use 1% or 300
-          }
-
-          this.countDown -= 1;
-          this.countDownTimer();
-          if (this.countDown == 0) {
-            this.countDown = 30; //set count value to 30
-          
-          }
-        }, 1000);
-      }
-    }, */
-
     async getQuestions() {
-      let res = await fetch("http://localhost:3000/q1");
-
+      let res = await axios.get("http://localhost:1100/submited/quizdetails");
       if (res.status == 200) {
-        let data = await res.json();
+        let data = await res.data.q1;
         this.questions.push(data);
       } else {
         this.countDown = 0;
@@ -152,20 +124,28 @@ export default {
     },
 
     //fuction onclick to question
-    test(e, question, answer, cquestion) {
-      if (answer == cquestion) {
-        this.userInput = { ...this.userInput, [question]: answer };
-        //console.log(this.userInput); //use object Destructuring to store common value;
-      }
+    test(e, question, answer, cquestion, id) {
+      this.userInput = { ...this.userInput, ["answer" + id]: answer };
+      console.log(this.userInput);
+      //console.log(this.userInput); //use object Destructuring to store common value;
     },
     //function on button submit
     async result() {
-      this.marks = Object.keys(this.userInput).length;
-      this.userInput = { ...this.userInput, ["username"]: this.username };
-      console.log(this.userInput);
-      //var t=this.userInput
-      
-      await axios.post("http://localhost:1100/submited/test", this.userInput);
+      if (this.require == false) {
+        this.open();
+      } else {
+        this.marks = Object.keys(this.userInput).length;
+        this.userInput = { ...this.userInput };
+        let userdetails = { username: this.username };
+        //var t=this.userInput
+        let userInput = this.userInput;
+        await axios
+          .post("http://localhost:1100/submited/test", {
+            userInput,
+            userdetails,
+          })
+          .then((response) => console.log(response));
+      }
     },
   },
   /* method fininesh */
@@ -202,3 +182,5 @@ export default {
   margin-left: 10px;
 }
 </style>
+
+

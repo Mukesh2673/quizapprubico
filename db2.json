@@ -1,19 +1,25 @@
-{
-  "posts": [
-    {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
-  "comments": [
-    {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
-    }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+{  
+  "q1": 
+  [
+      {
+          "id": 1,
+          "question": "What is the value of x-y+x+y",
+          "options": ["x","y","xy","0"],
+          "answers": ["x"]
+      },
+          {
+          "id": 2,
+          "question": "what is the value of (2*3)+6",
+          "options": ["24","12","15","11"],
+          "answers": ["12"]
+          },
+
+          {
+              "id": 3,
+              "question": "The decimal expansion of 22/7  is",
+              "answers": ["Non-terminating and repeating"],
+              "descriptive":true,
+              "isrequired":true
+          }
+      ]     
 }

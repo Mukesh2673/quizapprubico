@@ -17,7 +17,9 @@ data(){
         answers:'',
         addcss:false,
         placeholdertext:'',
-        submit:true
+        submit:true,
+        id:'',
+        required:false
         }
 },
 //get props from backend
@@ -41,10 +43,10 @@ props:{
      else{
              
               this.addcss=false;
+              this.required=true;
      }
-
-
-    this.descriptive_data={[this.question1.question]:this.answer}
+  this.id=this.question1.id
+    this.descriptive_data={...this.descriptive_data,['answer'+this.id]:this.answer}    
     this.$emit("answer",this.descriptive_data)  //send data to parent component within object
 
     },
@@ -68,9 +70,6 @@ computed:{
 
 </script>
 <style scoped>
-#descriptive{
-    
-}
 textarea::placeholder{
   color: red;
 }

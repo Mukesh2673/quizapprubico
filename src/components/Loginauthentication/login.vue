@@ -13,6 +13,8 @@
 </div>
     </template>
 <script>
+axios.defaults.withCredentials = true;
+ import axios from 'axios'  
 export default{
 name:'Login',
 data()
@@ -23,14 +25,22 @@ data()
     }
 },
 methods:{
-    login(){
-        console.log(this.username,this.password);
-        localStorage.setItem("username",this.username);
-        if(this.username)
-        {
-              this.$router.push({name:'Quiz'})
-        }
-    }
+ async login() {
+   
+         
+      let res = await axios.post("http://localhost:1100/submited/login", {
+        username: this.username,
+        password: this.password,
+      }).then((response) =>{
+            if(response.data){
+                   this.$router.push('Quiz');
+            }
+      })
+      
+      
+
+   
+    },
 }
 
 }

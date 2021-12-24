@@ -1,11 +1,11 @@
 <template>
 <div class="loginBox"> <img class="user" src="https://i.ibb.co/yVGxFPR/2.png" height="100px" width="100px">
     <h3>SignUp</h3>
-    <form action="login.php" method="post">
-        <div class="inputBox"> <input id="uname" type="text" name="Username" placeholder="Username"> 
-        <input id="pass" type="password" name="Password" placeholder="Password"> 
-        <input id="email" type="text" name="email" placeholder="Email">
-        <input id="mobile" type="text" name="Mobile" placeholder="Mobile">
+    <form method="post" @submit.prevent="register">
+        <div class="inputBox"> <input id="uname" type="text" v-model="username" placeholder="Username" required> 
+        <input id="pass" type="password" v-model="password" placeholder="Password" required> 
+        <input id="email" type="text"    v-model="email" placeholder="Email" required>
+        <input id="mobile" type="text"   v-model="Mobile" placeholder="Mobile" required>
         </div>
          <input type="submit" name="" value="Signup">
     </form> 
@@ -14,6 +14,50 @@
     </div>
 </div>
 </template>
+<script>
+ import axios from 'axios'   
+export default{
+name:'Login',
+data()
+{
+    return{
+        username:'',
+        password:'',
+        email:'',
+        Mobile:''
+
+    }
+},
+methods:{
+    register(){
+    let userdata={
+        username:this.username,
+        password:this.password,
+        Email:this.email,
+        Mobile:this.Mobile
+    }
+     
+
+      let res=axios.post("http://localhost:1100/submited/register",userdata);
+        localStorage.setItem("username",this.username);
+   
+    }
+}
+
+}
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
 <style scoped>
 body {
     margin: 0;
